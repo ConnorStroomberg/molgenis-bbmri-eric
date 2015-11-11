@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.molgenis</groupId>
 		<artifactId>molgenis</artifactId>
-		<version>1.8.1</version>
+		<version>1.12.1</version>
 	</parent>
 	<artifactId>molgenis-bbmri-eric</artifactId>
 	<packaging>war</packaging>
@@ -60,6 +60,11 @@
 			</resource>
 		</resources>
 		<plugins>
+			<!-- minify resources -->
+			<plugin>
+				<groupId>com.samaxes.maven</groupId>
+				<artifactId>minify-maven-plugin</artifactId>
+			</plugin>
 			<!-- make molgenis server properties available in pom.xml -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -72,86 +77,57 @@
 						</goals>
 						<configuration>
 							<files>
-								<file>${user.home}${file.separator}.molgenis${file.separator}bbmri-eric${file.separator}molgenis-server.properties</file>
+								<file>${user.home}/.molgenis/omx/molgenis-server.properties</file>
 							</files>
 							<quiet>true</quiet>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+			<!-- servlet container -->
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.2.6.v20141205</version>
+				<configuration>
+					<stopPort>8079</stopPort>
+					<stopKey>jetty-stop</stopKey>
+					<reload>manual</reload>
+					<systemProperties>
+						<systemProperty>
+							<name>molgenis.home</name>
+							<value>${user.home}${file.separator}.molgenis${file.separator}bbmri</value>
+						</systemProperty>
+					</systemProperties>
+					<webAppConfig>
+						<contextPath>/</contextPath>
+						<baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
+							<resourcesAsCSV>${basedir}/src/main/resources</resourcesAsCSV>
+						</baseResource>
+						<webInfIncludeJarPattern>.*/molgenis-[^/]*\.jar$|.*spring-[^/]*\.jar$
+						</webInfIncludeJarPattern>
+					</webAppConfig>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>mysql</groupId>
+						<artifactId>mysql-connector-java</artifactId>
+						<version>${mysql.connector.java.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 			<!-- execute molgenis generator -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
 			</plugin>
-			<!-- minify resources -->
-			<plugin>
-				<groupId>com.samaxes.maven</groupId>
-				<artifactId>minify-maven-plugin</artifactId>
-			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!-- servlet container -->
+				<!-- web server -->
 				<plugin>
-					<groupId>org.eclipse.jetty</groupId>
+					<groupId>org.mortbay.jetty</groupId>
 					<artifactId>jetty-maven-plugin</artifactId>
-					<version>9.2.6.v20141205</version>
-					<configuration>
-						<stopPort>8079</stopPort>
-						<stopKey>jetty-stop</stopKey>
-						<reload>manual</reload>
-						<systemProperties>
-							<systemProperty>
-								<name>molgenis.home</name>
-								<value>${user.home}${file.separator}.molgenis${file.separator}bbmri-eric</value>
-							</systemProperty>
-						</systemProperties>
-						<webAppConfig>
-							<contextPath>/</contextPath>
-							<baseResource
-								implementation="org.eclipse.jetty.util.resource.ResourceCollection">
-								<resourcesAsCSV>${basedir}/src/main/resources</resourcesAsCSV>
-							</baseResource>
-							<webInfIncludeJarPattern>.*/molgenis-[^/]*\.jar$|.*spring-[^/]*\.jar$
-							</webInfIncludeJarPattern>
-						</webAppConfig>
-					</configuration>
-					<!-- use jetty to run integration tests -->
-					<executions>
-						<execution>
-							<id>start-jetty</id>
-							<phase>pre-integration-test</phase>
-							<goals>
-								<goal>run</goal>
-							</goals>
-							<configuration>
-								<scanIntervalSeconds>0</scanIntervalSeconds>
-								<daemon>true</daemon>
-								<connectors>
-									<connector
-										implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-										<port>${selenium.http.port}</port>
-										<maxIdleTime>60000</maxIdleTime>
-									</connector>
-								</connectors>
-							</configuration>
-						</execution>
-						<execution>
-							<id>stop-jetty</id>
-							<phase>post-integration-test</phase>
-							<goals>
-								<goal>stop</goal>
-							</goals>
-						</execution>
-					</executions>
-					<dependencies>
-						<dependency>
-							<groupId>mysql</groupId>
-							<artifactId>mysql-connector-java</artifactId>
-							<version>${mysql.connector.java.version}</version>
-						</dependency>
-					</dependencies>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -195,6 +171,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.molgenis</groupId>
+			<artifactId>molgenis-pathways</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.molgenis</groupId>
 			<artifactId>molgenis-data-excel</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -205,12 +186,33 @@
 		</dependency>
 		<dependency>
 			<groupId>org.molgenis</groupId>
+			<artifactId>molgenis-data-googlespreadsheet</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>servlet-api</artifactId>
+					<groupId>org.mortbay.jetty</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.molgenis</groupId>
 			<artifactId>molgenis-data-jpa</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.molgenis</groupId>
+			<artifactId>molgenis-python</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.molgenis</groupId>
 			<artifactId>molgenis-r</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.molgenis</groupId>
+			<artifactId>molgenis-data-annotators</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -225,12 +227,33 @@
 		</dependency>
 		<dependency>
 			<groupId>org.molgenis</groupId>
-			<artifactId>molgenis-data-mysql</artifactId>
+			<artifactId>molgenis-data-merge</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.molgenis</groupId>
+			<artifactId>molgenis-data-vcf</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>log4j</artifactId>
+					<groupId>log4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.molgenis</groupId>
+			<artifactId>molgenis-data-mapper</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.molgenis</groupId>
 			<artifactId>molgenis-data-import</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.molgenis</groupId>
+			<artifactId>molgenis-data-mysql</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -251,26 +274,38 @@
 			<artifactId>spring-webmvc</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-java</artifactId>
-			<version>2.33.0</version>
-			<scope>test</scope>
+			<groupId>org.molgenis</groupId>
+			<artifactId>molgenis-model-registry</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-htmlunit-driver</artifactId>
-			<version>2.33.0</version>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.seleniumhq.selenium</groupId>
-					<artifactId>selenium-remote-driver</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.molgenis</groupId>
+			<artifactId>molgenis-ontology</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.molgenis</groupId>
 			<artifactId>molgenis-data-semanticsearch</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.molgenis</groupId>
+			<artifactId>molgenis-data-migrate</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.molgenis</groupId>
+			<artifactId>molgenis-questionnaires</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.molgenis</groupId>
+			<artifactId>molgenis-catalogue</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.molgenis</groupId>
+			<artifactId>molgenis-scripts</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

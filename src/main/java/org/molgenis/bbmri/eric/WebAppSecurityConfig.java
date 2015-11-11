@@ -8,13 +8,11 @@ import java.util.List;
 import org.molgenis.security.MolgenisRoleHierarchy;
 import org.molgenis.security.MolgenisWebAppSecurityConfig;
 import org.molgenis.ui.security.MolgenisAccessDecisionVoter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.vote.AffirmativeBased;
-import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,34 +26,20 @@ import org.springframework.security.web.access.expression.WebExpressionVoter;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebAppSecurityConfig extends MolgenisWebAppSecurityConfig
 {
-	@Autowired
-	private MolgenisAccessDecisionVoter molgenisAccessDecisionVoter;
-
-	@Autowired
-	private RoleVoter roleVoter;
-
 	// TODO automate URL authorization configuration (ticket #2133)
 	@Override
 	protected void configureUrlAuthorization(
 			ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry)
 	{
-		List<AccessDecisionVoter<? extends Object>> listOfVoters = new ArrayList<AccessDecisionVoter<?>>();
+		List<AccessDecisionVoter<?>> listOfVoters = new ArrayList<AccessDecisionVoter<?>>();
 		listOfVoters.add(new WebExpressionVoter());
 		listOfVoters.add(new MolgenisAccessDecisionVoter());
 		expressionInterceptUrlRegistry.accessDecisionManager(new AffirmativeBased(listOfVoters));
 
 		expressionInterceptUrlRegistry.antMatchers("/").permitAll()
-		// DAS datasource uses the database, unauthenticated users can
-		// not see any data
-				.antMatchers("/das/**").permitAll()
 
-				.antMatchers("/myDas/**").permitAll()
+				.antMatchers("/bbmri/**").permitAll();
 
-				.antMatchers("/annotators/**").authenticated()
-
-				.antMatchers("/bbmri/**").permitAll()
-
-				.antMatchers("/charts/**").authenticated();
 	}
 
 	@Override

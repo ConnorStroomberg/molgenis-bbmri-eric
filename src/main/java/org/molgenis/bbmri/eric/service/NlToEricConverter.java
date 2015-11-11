@@ -1,75 +1,42 @@
 package org.molgenis.bbmri.eric.service;
 
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_ACRONYM;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_AVAILABLE_BIOLOGICAL_SAMPLES;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_AVAILABLE_FEMALE_SAMPLES_DATA;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_AVAILABLE_GENEALOGICAL_RECORDS;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_AVAILABLE_IMAGING_DATA;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_AVAILABLE_MALE_SAMPLES_DATA;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_AVAILABLE_MEDICAL_RECORDS;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_AVAILABLE_NATIONAL_REGISTRIES;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_AVAILABLE_OTHER;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_AVAILABLE_PHYSIO_BIOCHEM_MEASUREMENTS;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_AVAILABLE_SURVEY_DATA;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_CLINICAL;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_CONTACT_CITY;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_CONTACT_COUNTRY;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_CONTACT_EMAIL;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_CONTACT_FIRST_NAME;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_CONTACT_LAST_NAME;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_CONTACT_PHONE;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_CONTACT_ZIP;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_COUNTRY;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_DATA_ACCESS_DESCRIPTION;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_DATA_ACCESS_FEE;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_DATA_ACCESS_JOINT_PROJECTS;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_DATA_ACCESS_URI;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_DESCRIPTION;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_HIS_AVAILABLE;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_ID;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_IS_AVAILABLE;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_IT_STAFF_SIZE;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_IT_SUPPORT_AVAILABLE;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_JURIDICAL_PERSON;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_MATERIAL_STORED_BLOOD;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_MATERIAL_STORED_DNA;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_MATERIAL_STORED_FAECES;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_MATERIAL_STORED_IMMORTALIZED_CELL_LINES;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_MATERIAL_STORED_ISOLATED_PATHOGEN;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_MATERIAL_STORED_OTHER;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_MATERIAL_STORED_PLASMA;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_MATERIAL_STORED_RNA;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_MATERIAL_STORED_SALIVA;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_MATERIAL_STORED_SERUM;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_MATERIAL_STORED_TISSUE_FFPE;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_MATERIAL_STORED_TISSUE_FROZEN;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_MATERIAL_STORED_URINE;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_NAME;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_PARTNER_CHARTER_SIGNED;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_POPULATION;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_RESEARCH_STUDY;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_SAMPLE_ACCESS_DESCRIPTION;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_SAMPLE_ACCESS_FEE;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_SAMPLE_ACCESS_JOINT_PROJECTS;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_SAMPLE_ACCESS_URI;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_SIZE;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_STANDALONE;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.BIOBANK_URL;
-import static org.molgenis.bbmri.eric.model.DirectoryMetaData.DIAGNOSIS_AVAILABLE;
+import static java.util.Objects.requireNonNull;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.ACRONYM;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.AGE_HIGH;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.AGE_LOW;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.AGE_UNIT;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.BIOBANKS;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.BIOBANK_DATA_ACCESS_DESCRIPTION;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.BIOBANK_DATA_ACCESS_FEE;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.BIOBANK_DATA_ACCESS_JOINT_PROJECTS;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.BIOBANK_DATA_ACCESS_URI;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.BIOBANK_SAMPLE_ACCESS_DESCRIPTION;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.BIOBANK_SAMPLE_ACCESS_FEE;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.BIOBANK_SAMPLE_ACCESS_JOINT_PROJECTS;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.BIOBANK_SAMPLE_ACCESS_URI;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.CONTACT_PERSON;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.DATA_CATEGORIES;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.DESCRIPTION;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.DISEASE;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.ID;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.LATITUDE;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.LONGITUDE;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.MATERIALS;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.NAME;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.NUMBER_OF_DONORS;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.SAMPLE_COLLECTIONS_ENTITY;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.SEX;
+import static org.molgenis.bbmri.eric.model.BbmriNlCheatSheet.TYPE;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map.Entry;
-import java.util.Set;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
-import org.molgenis.bbmri.eric.model.DirectoryMetaData;
 import org.molgenis.data.DataService;
 import org.molgenis.data.Entity;
-import org.molgenis.data.Query;
-import org.molgenis.data.support.DefaultEntity;
-import org.molgenis.data.support.QueryImpl;
+import org.molgenis.data.EntityMetaData;
+import org.molgenis.data.support.MapEntity;
 import org.molgenis.security.core.runas.RunAsSystem;
-import org.molgenis.security.core.runas.RunAsSystemProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,12 +45,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+
 /**
- * Translates BBMRI-NL sample collections to BBMRI-ERIC catalogue entries. Entries (biobanks) are stored in the
- * 'catalogue' entity.
- * 
- * @author tommy
- *
+ * Translates BBMRI-NL Sample Collections and Biobanks to BBMRI-ERIC collections and biobanks.
  */
 @Service
 public class NlToEricConverter
@@ -92,318 +57,355 @@ public class NlToEricConverter
 
 	private static final Logger LOG = LoggerFactory.getLogger(NlToEricConverter.class);
 
-	private final String BBMRI_NL_SOURCE_ENTITY = "bbmri_nl_sample_collections";
-	private final String NL = "NL";
+	private final String ERIC_COLLECTIONS = "eu_bbmri_eric_collections";
+	private final String ERIC_BIOBANKS = "eu_bbmri_eric_biobanks";
+	private final String ERIC_CONTACTS = "eu_bbmri_eric_contacts";
 
-	// mapping defaults
-	private final String DEFAULT_JURIDICAL_PERSON = "BBMRI-NL";
-	private final int DEFAULT_IT_STAFF_SIZE = 1;
-	private final String DEFAULT_DIAGNOSIS_AVAILABLE = "urn:miriam:icd:*";
+	private final String defaultContactEmail;
 
-	// floor(log10(nr of samples). All NL biobanks have at least 500 samples (actual numbers are not available)
-	// floor(log10(500)) = 2
-	private final int DEFAULT_NR_OF_SAMPLES = 2;
-	private String defaultContactEmail;
-
-	// nl attribute names
-	private final String ATT_MATERIALS = "materials";
-	private final String ATT_SEX = "sex";
-	private final String ATT_DATA_CATEGORIES = "data_categories";
-	private final String ATT_BIOBANK_SAMPLE_ACCESS_FEE = "sampleAccessFee";
-	private final String ATT_BIOBANK_SAMPLE_ACCESS_JOINT_PROJECTS = "sampleAccessJointProjects";
-	private final String ATT_BIOBANK_SAMPLE_ACCESS_DESCRIPTION = "sampleAccessDescription";
-	private final String ATT_BIOBANK_DATA_ACCESS_FEE = "dataAccessFee";
-	private final String ATT_BIOBANK_DATA_ACCESS_JOINT_PROJECTS = "dataAccessJointProjects";
-	private final String ATT_BIOBANK_DATA_ACCESS_DESCRIPTION = "dataAccessDescription";
-	private final String ATT_BIOBANK_SAMPLE_ACCESS_URI = "sampleAccessURI";
-	private final String ATT_BIOBANK_DATA_ACCESS_URI = "dataAccessURI";
-	private final String ATT_EMAIL = "email";
-	private final String ATT_COUNTRY = "country";
-	private final String ATT_FIRST_NAME = "first_name";
-	private final String ATT_LAST_NAME = "last_name";
-	private final String ATT_PHONE = "phone";
-	private final String ATT_CITY = "city";
-	private final String ATT_ZIP = "zip";
-	private final String ATT_CONTACT_PERSON = "contact_person";
-	private final String ATT_TYPE = "type";
-	private final String ATT_DESCRIPTION = "description";
-	private final String ATT_URL = "website";
-	private final String ATT_ACRONYM = "acronym";
-
-	private static final HashMap<String, String> materialMapping = new HashMap<String, String>()
-	{
-		private static final long serialVersionUID = 1L;
-		{
-			// old miabis format
-			put("DNA", BIOBANK_MATERIAL_STORED_DNA);
-			put("CDNA", BIOBANK_MATERIAL_STORED_RNA);
-			put("MICRO_RNA", BIOBANK_MATERIAL_STORED_RNA);
-			put("WHOLE_BLOOD", BIOBANK_MATERIAL_STORED_BLOOD);
-			put("PERIPHERAL_BLOOD_CELLS", BIOBANK_MATERIAL_STORED_BLOOD);
-			put("PLASMA", BIOBANK_MATERIAL_STORED_PLASMA);
-			put("SERUM", BIOBANK_MATERIAL_STORED_SERUM);
-			put("TISSUE_FROZEN", BIOBANK_MATERIAL_STORED_TISSUE_FROZEN);
-			put("TISSUE_PARAFFIN_EMBEDDED", BIOBANK_MATERIAL_STORED_TISSUE_FFPE);
-			put("CELL_LINES", BIOBANK_MATERIAL_STORED_IMMORTALIZED_CELL_LINES);
-			put("URINE", BIOBANK_MATERIAL_STORED_URINE);
-			put("SALIVA", BIOBANK_MATERIAL_STORED_SALIVA);
-			put("FECES", BIOBANK_MATERIAL_STORED_FAECES);
-			put("PATHOGEN", BIOBANK_MATERIAL_STORED_ISOLATED_PATHOGEN);
-			put("RNA", BIOBANK_MATERIAL_STORED_RNA);
-			put("OTHER", BIOBANK_MATERIAL_STORED_OTHER);
-
-			// new miabis format (uses ERIC classification):
-			put(BIOBANK_MATERIAL_STORED_DNA, BIOBANK_MATERIAL_STORED_DNA);
-			put(BIOBANK_MATERIAL_STORED_RNA, BIOBANK_MATERIAL_STORED_RNA);
-			put(BIOBANK_MATERIAL_STORED_BLOOD, BIOBANK_MATERIAL_STORED_BLOOD);
-			put(BIOBANK_MATERIAL_STORED_PLASMA, BIOBANK_MATERIAL_STORED_PLASMA);
-			put(BIOBANK_MATERIAL_STORED_SERUM, BIOBANK_MATERIAL_STORED_SERUM);
-			put(BIOBANK_MATERIAL_STORED_TISSUE_FROZEN, BIOBANK_MATERIAL_STORED_TISSUE_FROZEN);
-			put(BIOBANK_MATERIAL_STORED_TISSUE_FFPE, BIOBANK_MATERIAL_STORED_TISSUE_FFPE);
-			put(BIOBANK_MATERIAL_STORED_IMMORTALIZED_CELL_LINES, BIOBANK_MATERIAL_STORED_IMMORTALIZED_CELL_LINES);
-			put(BIOBANK_MATERIAL_STORED_URINE, BIOBANK_MATERIAL_STORED_URINE);
-			put(BIOBANK_MATERIAL_STORED_SALIVA, BIOBANK_MATERIAL_STORED_SALIVA);
-			put(BIOBANK_MATERIAL_STORED_FAECES, BIOBANK_MATERIAL_STORED_FAECES);
-			put(BIOBANK_MATERIAL_STORED_ISOLATED_PATHOGEN, BIOBANK_MATERIAL_STORED_ISOLATED_PATHOGEN);
-			put(BIOBANK_MATERIAL_STORED_OTHER, BIOBANK_MATERIAL_STORED_OTHER);
-		}
-	};
-
-	private static final HashMap<String, String> sexMapping = new HashMap<String, String>()
-	{
-		private static final long serialVersionUID = 1L;
-		{
-			// old miabis format
-			put("MALE", BIOBANK_AVAILABLE_MALE_SAMPLES_DATA);
-			put("FEMALE", BIOBANK_AVAILABLE_FEMALE_SAMPLES_DATA);
-
-			// new miabis format (uses ERIC classification):
-			put(BIOBANK_AVAILABLE_MALE_SAMPLES_DATA, BIOBANK_AVAILABLE_MALE_SAMPLES_DATA);
-			put(BIOBANK_AVAILABLE_FEMALE_SAMPLES_DATA, BIOBANK_AVAILABLE_FEMALE_SAMPLES_DATA);
-		}
-	};
-
-	private static final HashMap<String, String> dataMapping = new HashMap<String, String>()
-	{
-		private static final long serialVersionUID = 1L;
-		{
-			// old miabis format
-			put("BIOLOGICAL_SAMPLES", BIOBANK_AVAILABLE_BIOLOGICAL_SAMPLES);
-			put("SURVEY_DATA", BIOBANK_AVAILABLE_SURVEY_DATA);
-			put("IMAGING_DATA", BIOBANK_AVAILABLE_IMAGING_DATA);
-			put("MEDICAL_RECORDS", BIOBANK_AVAILABLE_MEDICAL_RECORDS);
-			put("NATIONAL_REGISTRIES", BIOBANK_AVAILABLE_NATIONAL_REGISTRIES);
-			put("GENEALOGICAL_RECORDS", BIOBANK_AVAILABLE_GENEALOGICAL_RECORDS);
-			put("PHYSIOLOGICAL_BIOCHEMICAL_MEASUREMENTS", BIOBANK_AVAILABLE_PHYSIO_BIOCHEM_MEASUREMENTS);
-			put("OTHER", BIOBANK_AVAILABLE_OTHER);
-
-			// new miabis format (uses ERIC classification
-			put(BIOBANK_AVAILABLE_BIOLOGICAL_SAMPLES, BIOBANK_AVAILABLE_BIOLOGICAL_SAMPLES);
-			put(BIOBANK_AVAILABLE_SURVEY_DATA, BIOBANK_AVAILABLE_SURVEY_DATA);
-			put(BIOBANK_AVAILABLE_IMAGING_DATA, BIOBANK_AVAILABLE_IMAGING_DATA);
-			put(BIOBANK_AVAILABLE_MEDICAL_RECORDS, BIOBANK_AVAILABLE_MEDICAL_RECORDS);
-			put(BIOBANK_AVAILABLE_NATIONAL_REGISTRIES, BIOBANK_AVAILABLE_NATIONAL_REGISTRIES);
-			put(BIOBANK_AVAILABLE_GENEALOGICAL_RECORDS, BIOBANK_AVAILABLE_GENEALOGICAL_RECORDS);
-			put(BIOBANK_AVAILABLE_PHYSIO_BIOCHEM_MEASUREMENTS, BIOBANK_AVAILABLE_PHYSIO_BIOCHEM_MEASUREMENTS);
-			put(BIOBANK_AVAILABLE_OTHER, BIOBANK_AVAILABLE_OTHER);
-		}
-	};
-
+	/**
+	 * Constructor.
+	 */
 	@Autowired
 	public NlToEricConverter(DataService dataService, @Value("${default_contact_email}") String defaultContactEmail)
 	{
-		if (dataService == null) throw new IllegalArgumentException("dataService is null");
-		if (defaultContactEmail == null) throw new RuntimeException(
-				"Property default_contact_email not set in molgenis-server.properties");
-
-		this.dataService = dataService;
-		this.defaultContactEmail = defaultContactEmail;
+		this.defaultContactEmail = requireNonNull(defaultContactEmail,
+				"property default_contact_email not set in molgenis-server.properties");
+		this.dataService = requireNonNull(dataService, "dataService is null");
 	}
 
-	// scheduled at midnight-ish
+	/**
+	 * Converts the BBMRI-NL Sample Collections and Biobanks entities. New entities are added, old entities are updated.
+	 * It is also detected when a Collection, Biobank or Person was removed so it can be removed from the corresponding
+	 * BBMRI-ERIC entities.
+	 * 
+	 * Executed around every midnight.
+	 */
 	@Scheduled(cron = "0 5 0 * * *")
-	@RunAsSystem
 	@Transactional
+	@RunAsSystem
 	public void convertNlToEric()
 	{
-		if (!dataService.hasRepository(BBMRI_NL_SOURCE_ENTITY))
+
+		try
 		{
-			LOG.warn("BBMRI-NL entity not found, skipping conversion to BBMRI-ERIC.");
-			return;
+			int collectionsAdded = 0;
+			int collectionsUpdated = 0;
+			int biobanksAdded = 0;
+			int biobanksUpdated = 0;
+
+			LOG.info("Start mapping BBMRI-NL data to BBMRI-ERIC schema");
+			Iterable<Entity> nlSampleCollections = dataService.findAll(SAMPLE_COLLECTIONS_ENTITY);
+			EntityMetaData ericBiobanksMeta = dataService.getEntityMetaData(ERIC_BIOBANKS);
+			EntityMetaData ericCollectionsMeta = dataService.getEntityMetaData(ERIC_COLLECTIONS);
+
+			for (Entity nlSampleCollection : nlSampleCollections)
+			{
+				Entity ericCollection = toEricCollection(nlSampleCollection, ericCollectionsMeta, ericBiobanksMeta);
+
+				if (dataService.findOne(ERIC_COLLECTIONS, ericCollection.getIdValue().toString()) == null)
+				{
+					dataService.add(ERIC_COLLECTIONS, ericCollection);
+					collectionsAdded++;
+				}
+				else
+				{
+					dataService.update(ERIC_COLLECTIONS, ericCollection);
+					collectionsUpdated++;
+				}
+
+				Iterator<Entity> biobanks = nlSampleCollection.getEntities(BIOBANKS).iterator();
+				List<Entity> ericBiobanks = Lists.newArrayList();
+				if (biobanks.hasNext())
+				{
+					biobanks.forEachRemaining(biobank -> ericBiobanks.add(toEricBiobank(biobank, ericBiobanksMeta)));
+				}
+				else
+				{
+					ericBiobanks.add(toDummyEricBiobank(nlSampleCollection, ericBiobanksMeta));
+				}
+
+				for (Entity biobank : ericBiobanks)
+				{
+					if (dataService.findOne(ERIC_BIOBANKS, biobank.getIdValue().toString()) == null)
+					{
+						dataService.add(ERIC_BIOBANKS, biobank);
+						biobanksAdded++;
+					}
+					else
+					{
+						dataService.update(ERIC_BIOBANKS, biobank);
+						biobanksUpdated++;
+					}
+				}
+
+				LOG.info(String.format(
+						"Finished mapping. Added %d sample collections. Updated %d sample collections. Added %d biobanks. Updated %d biobanks.",
+						collectionsAdded, collectionsUpdated, biobanksAdded, biobanksUpdated));
+			}
+		}
+		catch (Exception e)
+		{
+			LOG.error("Error mapping BBMRI-NL data to BBMRI-ERIC schema", e);
+		}
+	}
+
+	/**
+	 * Maps a BBMRI-NL Sample Collections entity to a BBMRI-ERIC collections entity
+	 */
+	private Entity toEricCollection(Entity nlSampleCollection, EntityMetaData ericCollectionsMeta,
+			EntityMetaData ericBiobanksMeta)
+	{
+		Entity ericCollection = new MapEntity(ericCollectionsMeta);
+
+		ericCollection.set(ID, toEricCollectionId(nlSampleCollection.getString(ID)));
+		ericCollection.set(ACRONYM, nlSampleCollection.getString(ACRONYM));
+		ericCollection.set(NAME, toEricName(nlSampleCollection.getString(NAME)));
+		ericCollection.set(DESCRIPTION, nlSampleCollection.getString(DESCRIPTION));
+		ericCollection.set(SEX, toEricRefEntities("eu_bbmri_eric_sex_types", nlSampleCollection.getEntities(SEX)));
+		ericCollection.set(AGE_LOW, nlSampleCollection.getInt(AGE_LOW));
+		ericCollection.set(AGE_HIGH, nlSampleCollection.getInt(AGE_HIGH));
+		ericCollection.set(AGE_UNIT,
+				toEricRefEntity("eu_bbmri_eric_age_units", nlSampleCollection.getEntity(AGE_UNIT), true));
+		ericCollection.set(DATA_CATEGORIES,
+				toEricRefEntities("eu_bbmri_eric_data_types", nlSampleCollection.getEntities(DATA_CATEGORIES)));
+		ericCollection.set(MATERIALS,
+				toEricRefEntities("eu_bbmri_eric_material_types", nlSampleCollection.getEntities(MATERIALS)));
+		ericCollection.set("storage_temperatures", null);
+		ericCollection.set(TYPE,
+				toEricRefEntities("eu_bbmri_eric_collection_types", nlSampleCollection.getEntities(TYPE)));
+		ericCollection.set(DISEASE,
+				toEricRefEntities("eu_bbmri_eric_disease_types", nlSampleCollection.getEntities(DISEASE)));
+		ericCollection.set("head", null);
+		ericCollection.set("head_role", null);
+		ericCollection.set("sample_access_fee", nlSampleCollection.getBoolean(BIOBANK_SAMPLE_ACCESS_FEE));
+		ericCollection.set("sample_access_joint_project",
+				nlSampleCollection.getBoolean(BIOBANK_SAMPLE_ACCESS_JOINT_PROJECTS));
+		ericCollection.set("sample_access_description",
+				nlSampleCollection.getString(BIOBANK_SAMPLE_ACCESS_DESCRIPTION));
+		ericCollection.set("sample_access_uri", nlSampleCollection.getString(BIOBANK_SAMPLE_ACCESS_URI));
+		ericCollection.set("data_access_fee", nlSampleCollection.getBoolean(BIOBANK_DATA_ACCESS_FEE));
+		ericCollection.set("data_access_joint_project",
+				nlSampleCollection.getBoolean(BIOBANK_DATA_ACCESS_JOINT_PROJECTS));
+		ericCollection.set("data_access_description", nlSampleCollection.getString(BIOBANK_DATA_ACCESS_DESCRIPTION));
+		ericCollection.set("data_access_uri", nlSampleCollection.getString(BIOBANK_DATA_ACCESS_URI));
+		ericCollection.set("size", nlSampleCollection.getInt(NUMBER_OF_DONORS));
+		ericCollection.set("order_of_magnitude", toOrderOfMagnitude(nlSampleCollection.getInt(NUMBER_OF_DONORS)));
+		ericCollection.set("timestamp", new Date());
+		ericCollection.set("collaboration_commercial", null);
+		ericCollection.set("collaboration_non_for_profit", null);
+		ericCollection.set("contact", toEricContact(nlSampleCollection.getEntities(CONTACT_PERSON).iterator().next()));
+		ericCollection.set("contact_priority", 0);
+		ericCollection.set("bioresource_reference", null);
+		ericCollection.set("latitude", null);
+		ericCollection.set("longitude", null);
+		ericCollection.set("network", null);
+
+		return ericCollection;
+	}
+
+	private Entity toDummyEricBiobank(Entity nlSampleCollection, EntityMetaData ericBiobanksMeta)
+	{
+		Entity ericBiobank = new MapEntity(ericBiobanksMeta);
+
+		ericBiobank.set("contact", getDummyContact());
+		ericBiobank.set("contact_priority", 0);
+		ericBiobank.set("latitude", null);
+		ericBiobank.set("longitude", null);
+		ericBiobank.set("collaboration_commercial", null);
+		ericBiobank.set("collaboration_non_for_profit", null);
+		ericBiobank.set("id", toEricBiobankId(nlSampleCollection.getString("id")));
+		ericBiobank.set("name", toEricName(nlSampleCollection.getString("name")));
+		ericBiobank.set("juridical_person", "N/A");
+		ericBiobank.set("country", dataService.findOne("eu_bbmri_eric_countries", "NL"));
+		ericBiobank.set("it_support_available", null);
+		ericBiobank.set("it_staff_size", null);
+		ericBiobank.set("is_available", null);
+		ericBiobank.set("his_available", null);
+		ericBiobank.set("partner_charter_signed", true);
+		ericBiobank.set("acronym", nlSampleCollection.getString("acronym"));
+		ericBiobank.set("description", nlSampleCollection.getString("description"));
+		ericBiobank.set("url", nlSampleCollection.getString("website"));
+		ericBiobank.set("head", null);
+		ericBiobank.set("head_role", null);
+		ericBiobank.set("type", null);
+		ericBiobank.set("bioresource_reference", null);
+
+		return ericBiobank;
+	}
+
+	/**
+	 * Maps a BBMRI-NL Biobank entity to a BBMRI-ERIC biobank entity and adds it to the repository
+	 */
+	private Entity toEricBiobank(Entity nlBiobank, EntityMetaData ericBiobanksMeta)
+	{
+		Entity ericBiobank = new MapEntity(ericBiobanksMeta);
+
+		Iterator<Entity> contacts = nlBiobank.getEntities("contact_person").iterator();
+		ericBiobank.set("contact", contacts.hasNext() ? toEricContact(contacts.next()) : getDummyContact());
+
+		ericBiobank.set("contact_priority", 0);
+		ericBiobank.set("latitude", nlBiobank.getString(LATITUDE));
+		ericBiobank.set("longitude", nlBiobank.getString(LONGITUDE));
+		ericBiobank.set("collaboration_commercial", null);
+		ericBiobank.set("collaboration_non_for_profit", null);
+		ericBiobank.set("id", toEricBiobankId(nlBiobank.getString("id")));
+		ericBiobank.set("name", toEricName(nlBiobank.getString("name")));
+
+		Iterator<Entity> juristic_persons = nlBiobank.getEntities("juristic_person").iterator();
+		String name;
+		Entity country;
+		if (juristic_persons.hasNext())
+		{
+			Entity person = juristic_persons.next();
+			name = person.getString("name");
+			country = toEricRefEntity("eu_bbmri_eric_countries", person.getEntity("country"), false);
+		}
+		else
+		{
+			name = "N/A";
+			country = dataService.findOne("eu_bbmri_eric_countries", "NL");
 		}
 
-		if (defaultContactEmail == null) throw new RuntimeException(
-				"Please set default_contact_email in molgenis-server.properties");
+		ericBiobank.set("juridical_person", name);
+		ericBiobank.set("country", country);
 
-		// delete old NL nodes
-		LOG.info("Deleting old NL catalogue nodes");
+		ericBiobank.set("it_support_available", nlBiobank.getBoolean("biobankITSupportAvailable"));
+		ericBiobank.set("it_staff_size", nlBiobank.getInt("biobankITStaffSize"));
+		ericBiobank.set("is_available", nlBiobank.getBoolean("biobankISAvailable"));
+		ericBiobank.set("his_available", nlBiobank.getBoolean("biobankHISAvailable"));
+		ericBiobank.set("partner_charter_signed", true);
+		ericBiobank.set("acronym", nlBiobank.getString("acronym"));
+		ericBiobank.set("description", nlBiobank.getString("description"));
+		ericBiobank.set("url", nlBiobank.getString("website"));
+		ericBiobank.set("head", null);
+		ericBiobank.set("head_role", null);
+		ericBiobank.set("type", null);
+		ericBiobank.set("bioresource_reference", null);
 
-		Query q = new QueryImpl().eq(DirectoryMetaData.BIOBANK_COUNTRY, NL);
-		Iterable<Entity> entitiesToDelete = RunAsSystemProxy.runAsSystem(() -> dataService.findAll(
-				DirectoryMetaData.FULLY_QUALIFIED_NAME, q));
+		return ericBiobank;
+	}
 
-		dataService.delete(DirectoryMetaData.FULLY_QUALIFIED_NAME, entitiesToDelete);
+	/**
+	 * Maps an mref or categorical_mref of BBMRI-NL to an mref or categorical_mref of BBMRI-ERIC.
+	 */
+	private Iterable<Entity> toEricRefEntities(String refEntityName, Iterable<Entity> nlEntities)
+	{
+		List<Object> ids = Lists.newArrayList();
+		nlEntities.forEach(e -> ids.add(e.getIdValue()));
+		return dataService.findAll(refEntityName, ids);
+	}
 
-		LOG.info("Starting conversion of BBMRI-NL data to BBMRI-ERIC. BBMRI-NL entity = {}", BBMRI_NL_SOURCE_ENTITY);
+	/**
+	 * Returns the name or "N/A" as null flavor
+	 */
+	private String toEricName(String name)
+	{
+		return name == null ? "N/A" : name;
+	}
 
-		Iterable<Entity> it = dataService.findAll(BBMRI_NL_SOURCE_ENTITY);
+	/**
+	 * Maps xref or categoricals from BBMRI-NL to BBMRI-ERIC.
+	 */
+	private Entity toEricRefEntity(String refEntityName, Entity nlEntity, boolean nillable)
+	{
+		if (!nillable) requireNonNull(nlEntity);
+		if (nlEntity == null) return null;
+		return dataService.findOne(refEntityName, nlEntity.getIdValue().toString());
+	}
 
-		int adds = 0;
-		for (Entity nlBiobank : it)
+	/**
+	 * Maps BBMRI-NL Persons to BBMRI-ERIC contacts. New contacts get added, existing contacts get updated.
+	 */
+	private Entity toEricContact(Entity nlContactPerson)
+	{
+		Entity ericContact = new MapEntity(dataService.getEntityMetaData(ERIC_CONTACTS));
+
+		ericContact.set("id", nlContactPerson.getString("id"));
+		ericContact.set("first_name", nlContactPerson.getString("first_name"));
+		ericContact.set("last_name", nlContactPerson.getString("last_name"));
+		ericContact.set("phone", nlContactPerson.getString("phone"));
+
+		String email = nlContactPerson.getString("email");
+		ericContact.set("email", email == null ? defaultContactEmail : email);
+
+		ericContact.set("address", nlContactPerson.getString("address"));
+		ericContact.set("zip", nlContactPerson.getString("zip"));
+		ericContact.set("city", nlContactPerson.getString("city"));
+		ericContact.set("country",
+				toEricRefEntity("eu_bbmri_eric_countries", nlContactPerson.getEntity("country"), false));
+
+		if (dataService.findOne(ERIC_CONTACTS, ericContact.getIdValue().toString()) == null)
 		{
-			DefaultEntity ericBiobank = new DefaultEntity(
-					dataService.getEntityMetaData(DirectoryMetaData.FULLY_QUALIFIED_NAME), dataService);
-
-			// mapped attributes
-			ericBiobank.set(BIOBANK_ID, ericId((String) nlBiobank.getIdValue()));
-			ericBiobank.set(BIOBANK_NAME, nlBiobank.getLabelValue());
-			ericBiobank.set(BIOBANK_COUNTRY, NL);
-			ericBiobank.set(BIOBANK_SAMPLE_ACCESS_FEE, nlBiobank.get(ATT_BIOBANK_SAMPLE_ACCESS_FEE));
-			ericBiobank.set(BIOBANK_SAMPLE_ACCESS_JOINT_PROJECTS,
-					nlBiobank.get(ATT_BIOBANK_SAMPLE_ACCESS_JOINT_PROJECTS));
-			ericBiobank.set(BIOBANK_SAMPLE_ACCESS_DESCRIPTION, nlBiobank.get(ATT_BIOBANK_SAMPLE_ACCESS_DESCRIPTION));
-			ericBiobank.set(BIOBANK_DATA_ACCESS_FEE, nlBiobank.get(ATT_BIOBANK_DATA_ACCESS_FEE));
-			ericBiobank.set(BIOBANK_DATA_ACCESS_JOINT_PROJECTS, nlBiobank.get(ATT_BIOBANK_DATA_ACCESS_JOINT_PROJECTS));
-			ericBiobank.set(BIOBANK_DATA_ACCESS_DESCRIPTION, nlBiobank.get(ATT_BIOBANK_DATA_ACCESS_DESCRIPTION));
-			ericBiobank.set(BIOBANK_SAMPLE_ACCESS_URI, nlBiobank.get(ATT_BIOBANK_SAMPLE_ACCESS_URI));
-			ericBiobank.set(BIOBANK_DATA_ACCESS_URI, nlBiobank.get(ATT_BIOBANK_DATA_ACCESS_URI));
-			ericBiobank.set(BIOBANK_DESCRIPTION, nlBiobank.get(ATT_DESCRIPTION));
-			ericBiobank.set(BIOBANK_URL, nlBiobank.get(ATT_URL));
-			ericBiobank.set(BIOBANK_ACRONYM, nlBiobank.get(ATT_ACRONYM));
-
-			// contact person (only use first)
-			Entity person = nlBiobank.getEntities(ATT_CONTACT_PERSON).iterator().next();
-			if (person.get(ATT_EMAIL) == null)
-			{
-				ericBiobank.set(BIOBANK_CONTACT_EMAIL, defaultContactEmail);
-			}
-			else
-			{
-				ericBiobank.set(BIOBANK_CONTACT_EMAIL, person.get(ATT_EMAIL));
-			}
-
-			if (person.getEntity(ATT_COUNTRY) == null)
-			{
-				ericBiobank.set(BIOBANK_CONTACT_COUNTRY, NL);
-			}
-			else
-			{
-				ericBiobank.set(BIOBANK_CONTACT_COUNTRY, person.getEntity(ATT_COUNTRY).getIdValue());
-			}
-
-			ericBiobank.set(BIOBANK_CONTACT_FIRST_NAME, person.get(ATT_FIRST_NAME));
-			ericBiobank.set(BIOBANK_CONTACT_LAST_NAME, person.get(ATT_LAST_NAME));
-			ericBiobank.set(BIOBANK_CONTACT_PHONE, person.get(ATT_PHONE));
-			ericBiobank.set(BIOBANK_CONTACT_CITY, person.get(ATT_CITY));
-			ericBiobank.set(BIOBANK_CONTACT_ZIP, person.get(ATT_ZIP));
-
-			// mrefs to booleans
-			convertMref(nlBiobank, ericBiobank, materialMapping, ATT_MATERIALS);
-			convertMref(nlBiobank, ericBiobank, sexMapping, ATT_SEX);
-			convertMref(nlBiobank, ericBiobank, dataMapping, ATT_DATA_CATEGORIES);
-
-			// non-available mappings using default values
-			ericBiobank.set(BIOBANK_PARTNER_CHARTER_SIGNED, true);
-			ericBiobank.set(BIOBANK_SIZE, DEFAULT_NR_OF_SAMPLES);
-			ericBiobank.set(BIOBANK_IT_SUPPORT_AVAILABLE, false);
-			ericBiobank.set(BIOBANK_IT_STAFF_SIZE, DEFAULT_IT_STAFF_SIZE);
-			ericBiobank.set(BIOBANK_IS_AVAILABLE, false);
-			ericBiobank.set(BIOBANK_HIS_AVAILABLE, false);
-			ericBiobank.set(BIOBANK_JURIDICAL_PERSON, DEFAULT_JURIDICAL_PERSON);
-
-			// rule based mappings
-			Set<String> types = new HashSet<>();
-			nlBiobank.getEntities(ATT_TYPE).forEach((type) -> types.add(type.getIdValue().toString()));
-
-			if (types.contains("HOSPITAL"))
-			{
-				ericBiobank.set(DIAGNOSIS_AVAILABLE, DEFAULT_DIAGNOSIS_AVAILABLE);
-				ericBiobank.set(BIOBANK_CLINICAL, true);
-				types.remove("HOSPITAL");
-			}
-			else
-			{
-				ericBiobank.set(BIOBANK_CLINICAL, false);
-			}
-
-			if (types.contains("POPULATION_BASED"))
-			{
-				ericBiobank.set(BIOBANK_POPULATION, true);
-				types.remove("POPULATION_BASED");
-			}
-			else
-			{
-				ericBiobank.set(BIOBANK_POPULATION, false);
-			}
-
-			if (!types.isEmpty())
-			{
-				ericBiobank.set(BIOBANK_RESEARCH_STUDY, true);
-			}
-			else
-			{
-				ericBiobank.set(BIOBANK_RESEARCH_STUDY, false);
-			}
-
-			if (ericBiobank.getString(BIOBANK_JURIDICAL_PERSON).equals("BBMRI-NL"))
-			{
-				ericBiobank.set(BIOBANK_STANDALONE, true);
-			}
-			else
-			{
-				ericBiobank.set(BIOBANK_STANDALONE, false);
-			}
-
-			dataService.add(DirectoryMetaData.FULLY_QUALIFIED_NAME, ericBiobank);
-			adds++;
-
+			dataService.add(ERIC_CONTACTS, ericContact);
 		}
-		LOG.info(String.format("Added %s NL biobanks.", Integer.toString(adds)));
+		else
+		{
+			dataService.update(ERIC_CONTACTS, ericContact);
+		}
+
+		return ericContact;
+	}
+
+	/**
+	 * Returns a dummy contact. Needed because not all NL biobank entities are guaranteed to have a contact person, but
+	 * is is a required field in the ERIC model.
+	 */
+	private Entity getDummyContact()
+	{
+		Entity ericContact = new MapEntity(dataService.getEntityMetaData(ERIC_CONTACTS));
+
+		String na = "N/A";
+		ericContact.set("id", "N/A");
+		ericContact.set("first_name", na);
+		ericContact.set("last_name", na);
+		ericContact.set("phone", na);
+		ericContact.set("email", defaultContactEmail);
+		ericContact.set("address", na);
+		ericContact.set("zip", na);
+		ericContact.set("city", na);
+		ericContact.set("country", dataService.findOne("eu_bbmri_eric_countries", "NL"));
+
+		if (dataService.findOne(ERIC_CONTACTS, ericContact.getIdValue().toString()) == null)
+		{
+			dataService.add(ERIC_CONTACTS, ericContact);
+		}
+		else
+		{
+			dataService.update(ERIC_CONTACTS, ericContact);
+		}
+
+		return ericContact;
 	}
 
 	/**
 	 * Generates BBMRI ERIC identifier.
 	 * 
-	 * ISO 3166-1 alpha-2 + underscore + biobank national ID or name, prefixed with bbmri-eric:ID:
+	 * Unique collection ID within BBMRI-ERIC based on MIABIS 2.0 standard, constructed from biobankID prefix +
+	 * :collection: + local collection ID string
 	 */
-	private String ericId(String id)
+	private String toEricCollectionId(String id)
 	{
-		return new StringBuilder().append("bbmri-eric:ID:").append(NL).append('_').append(id).toString();
+		return new StringBuilder().append("nl_").append(id).append(":collection:").append("nl_").append(id).toString();
 	}
 
 	/**
-	 * Translates BBMRI-NL mrefs/categoricals to BBMRI-ERIC booleans using a mapping of ERIC boolean names and NL mref
-	 * values.
+	 * Generates BBMRI ERIC identifier.
 	 * 
-	 * @param nlBiobank
-	 *            BBMRI-NL sample_collections entity
-	 * @param ericBiobank
-	 *            BBMRI-ERIC catalogue entity
-	 * @param mapping
-	 *            hashmap of ERIC booleans and NL mref values
-	 * @param attribute
-	 *            the mref attribute of the NL sample_collections entity
+	 * Unique biobank ID withing BBMRI-ERIC based on MIABIS 2.0 standard (ISO 3166-1 alpha-2 + underscore + biobank
+	 * national ID or name), prefixed with bbmri-eric:ID: string
 	 */
-	private void convertMref(Entity nlBiobank, DefaultEntity ericBiobank, HashMap<String, String> mapping,
-			String attribute)
+	private String toEricBiobankId(String id)
 	{
-		Set<String> refValues = new HashSet<>();
-		nlBiobank.getEntities(attribute).forEach((e) -> refValues.add((String) e.getIdValue()));
+		return new StringBuilder().append("bbmri-eric:ID:").append("nl").append('_').append(id).toString();
+	}
 
-		for (Entry<String, String> map : mapping.entrySet())
-		{
-			if (refValues.contains(map.getKey()))
-			{
-				ericBiobank.set(map.getValue(), true);
-			}
-			else
-			{
-				// some NL terms are coalesced into one ERIC term. don't set it to false if it is already true
-				if (!(ericBiobank.getBoolean(map.getValue()) != null && ericBiobank.getBoolean(map.getValue()) == true))
-				{
-					ericBiobank.set(map.getValue(), false);
-				}
-			}
-		}
+	/**
+	 * Returns the order of magnitude of a number
+	 */
+	private int toOrderOfMagnitude(int numberOfDonors)
+	{
+		if (numberOfDonors == 0) throw new IllegalArgumentException("can't take log10 of 0");
+		return (int) Math.log10(numberOfDonors);
 	}
 }
